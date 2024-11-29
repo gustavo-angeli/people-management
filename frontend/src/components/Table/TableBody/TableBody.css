@@ -1,0 +1,34 @@
+#body {
+    width: fit-content;
+    height: 60vh;
+    overflow: scroll;
+    scroll-snap-type: y mandatory;
+}
+#body .row {
+    scroll-snap-align: start;
+}
+
+#body .tableData:nth-child(1) {
+    width: 40px;
+}
+
+#body .tableData:nth-child(5) {
+    width: 100px;
+}
+
+#body .tableData .rowBtn {
+    cursor: pointer;
+    border: none;
+    border-radius: 2px;
+    background-color: #F7F4F3;
+    padding: 0.5rem;
+}
+#body .row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid 1px #F7F4F3;
+}
+
+#body .row:last-child {
+    border-bottom: none;
+}

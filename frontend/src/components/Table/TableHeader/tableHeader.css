@@ -1,0 +1,14 @@
+#head {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid 1px #D4D4ED;
+
+}
+
+#table #head .tableData:nth-child(1) {
+    width: 40px;
+}
+#table #head .tableData:nth-child(5) {
+    width: 100px;
+}

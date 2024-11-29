@@ -1,0 +1,29 @@
+#navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 2rem;
+    padding: 1rem 2rem;
+    background-color: #171D1C;
+}
+
+#navbar .searchBox {
+    display: flex;
+    flex-direction: row;
+}
+
+#navbar .searchBox .btn {
+    border-radius: 0 2px 2px 0;
+}
+
+#navbar .searchBox .navInput {
+    border: #D4D4ED 1px solid;
+    border-radius: 2px 0 0 2px;
+    background-color: #F7F4F3;
+    padding: .4rem;
+}
+
+#navbar .searchBox .navInput:focus {
+    outline: none;
+}
+
