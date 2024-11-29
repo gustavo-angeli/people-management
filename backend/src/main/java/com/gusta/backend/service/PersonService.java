@@ -37,7 +37,7 @@ public class PersonService {
     }
     public Response<List<PersonDTO>> findAll(int page, int size) {
         List<PersonDTO> personList = new ArrayList<>();
-        repository.findAll(Pageable.ofSize(size).withPage(page)).forEach(entity ->
+        repository.findAllSortedById(Pageable.ofSize(size).withPage(page)).forEach(entity ->
                 personList.add(new PersonDTO(entity.getId(), entity.getName(), entity.getEmail(), entity.getPassword()))
         );
 
