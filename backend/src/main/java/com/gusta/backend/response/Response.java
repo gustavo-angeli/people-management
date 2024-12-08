@@ -21,6 +21,4 @@ public class Response<T> {
     public static <T> Response<T> failure(String message) {
         return new Response<>(false, message, null);
     }
-
-    // Getters e setters
 }
