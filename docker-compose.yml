@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # Serviço PostgreSQL
+  db:
+    image: postgres:latest
+    container_name: my_postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres # Definindo o banco de dados padrão
+    ports:
+      - "5432:5432"
+    networks:
+      - app_network
+
+  # Serviço PGAdmin
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "8888:80"
+    networks:
+      - app_network
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@r.com
+      PGADMIN_DEFAULT_PASSWORD: root
+
+  # Serviço Frontend
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "4173:4173"
+    environment:
+      - VITE_HOST=0.0.0.0
+    networks:
+      - app_network
+
+  # Serviço Backend (Spring Boot)
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./env.properties:/config/env.properties
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
