@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,30 +29,31 @@ public class PersonService {
         return Response.success(dto);
     }
     public Response<PersonDTO> findById(long id) {
-        Person entity = repository.findById(id).orElse(null);
-        if (entity == null) {
+        Optional<Person> optionalPerson = repository.findById(id);
+        if (optionalPerson.isEmpty()) {
             return Response.failure("Nonexistent person");
         }
+        Person entity = optionalPerson.get();
         return Response.success(new PersonDTO(entity.getId(), entity.getName(), entity.getEmail(), entity.getPassword()));
     }
     public Response<List<PersonDTO>> findAll(int page, int size) {
-        List<PersonDTO> personList = new ArrayList<>();
-        repository.findAllSortedById(Pageable.ofSize(size).withPage(page)).forEach(entity ->
-                personList.add(new PersonDTO(entity.getId(), entity.getName(), entity.getEmail(), entity.getPassword()))
+        return Response.success(
+                repository.findAllSortedById(Pageable.ofSize(size).withPage(page))
+                        .stream().map(
+                                e -> new PersonDTO(e.getId(), e.getName(), e.getEmail(), e.getPassword())
+                        )
+                        .toList()
         );
-
-        return Response.success(personList);
     }
     public Response<PersonDTO> updateById(long id, PersonDTO dto) {
+        if (!repository.existsById(id)) {
+            return Response.failure("Nonexistent person");
+        }
         if (repository.existsByEmail(dto.getEmail()) && !repository.isUserEmailByUserId(id, dto.getEmail())) {
             return Response.failure("This email already been used");
         }
 
-        Person entity = repository.findById(id).orElse(null);
-
-        if (entity == null) {
-            return Response.failure("Nonexistent person");
-        }
+        Person entity = repository.findById(id).get();
 
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
@@ -60,7 +61,11 @@ public class PersonService {
 
         return Response.success(null);
     }
-    public void deleteById(long id) {
+    public Response<PersonDTO> deleteById(long id) {
+        if (!repository.existsById(id)) {
+            return Response.failure("Nonexistent person");
+        }
         repository.deleteById(id);
+        return Response.success(null);
     }
 }

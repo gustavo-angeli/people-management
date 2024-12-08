@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class PersonDTO {
     private Long id;
-    @NotBlank(message = "Please provide a username")
+    @NotBlank(message = "Null or empty username")
     private String name;
-    @Email(message = "Please provide a valid email address")
+    @NotBlank(message = "Null or empty email address")
+    @Email(message = "Invalid email address")
     private String email;
+    @NotBlank(message = "Null or empty password")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
 }
